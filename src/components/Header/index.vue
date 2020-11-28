@@ -37,6 +37,7 @@
         <div class="searchArea">
           <form action="###" class="searchForm">
             <input
+              v-model="searchText"
               type="text"
               id="autocomplete"
               class="input-error input-xxlarge"
@@ -58,10 +59,21 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      searchText: "",
+    };
+  },
   methods: {
     search() {
+      //获取搜索数据
+      const { searchText } = this;
+      //是否要添加params参数
+      const params = searchText ? `/${searchText}` : "";
+      //生成要跳转的路径
+      const location = "/search" + params;
       //编程式导航将来做搜索功能
-      this.$router.push("/search");
+      this.$router.push(location);
     },
   },
 };
