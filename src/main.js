@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router/index' //引入router
 
 import './styles/reset.css' //引入公共资源
+import './plugins/element.js'
 
 Vue.config.productionTip = false
 
