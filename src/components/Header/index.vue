@@ -35,20 +35,15 @@
           </router-link>
         </h1>
         <div class="searchArea">
-          <form action="###" class="searchForm">
+          <form @submit.prevent="search" class="searchForm">
             <input
               v-model="searchText"
               type="text"
               id="autocomplete"
               class="input-error input-xxlarge"
             />
-            <button
-              @click="search"
-              class="sui-btn btn-xlarge btn-danger"
-              type="button"
-            >
-              搜索
-            </button>
+            <!-- button不指定type那么在表单中就是submit -->
+            <button class="sui-btn btn-xlarge btn-danger">搜索</button>
           </form>
         </div>
       </div>
@@ -65,15 +60,41 @@ export default {
     };
   },
   methods: {
+    //     search(){
+    //  //获取搜索数据
+    //       const { searchText } = this;
+    //       //是否要添加params参数
+    //       /* const params = searchText ? `/${searchText}` : "";
+    //       //生成要跳转的路径
+    //       const location = "/search" + params; */
+    //       //编程式导航将来做搜索功能
+    //       // this.$router.push(location);
+    //     }
     search() {
-      //获取搜索数据
+      // path: "/search",
+      /*         name: "search", //这个写法命名路由才可以使用  因为命名路由搜索为空时不显示
+        params: {
+          searchText,
+        },
+        query: {
+          name: "jack",  这个写法搜索空params时不显示search路由路径
+        },
+      } */
       const { searchText } = this;
-      //是否要添加params参数
-      const params = searchText ? `/${searchText}` : "";
-      //生成要跳转的路径
-      const location = "/search" + params;
-      //编程式导航将来做搜索功能
+      const location = { name: "search" };
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
+      //为了避免编程式导航连续跳转单一网页,设置push后面的参数
       this.$router.push(location);
+      // .then((res) => {
+      //   console.log("成功" + res);
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      // });
     },
   },
 };
