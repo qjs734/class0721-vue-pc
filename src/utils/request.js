@@ -7,9 +7,10 @@
     失败：返回失败的promise 值为失败的原因
 */
 import axios from 'axios'
-// 引入样式
+// 引入进度条样式
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+//单独element引用样式
 import { Message } from 'element-ui';
 
 
