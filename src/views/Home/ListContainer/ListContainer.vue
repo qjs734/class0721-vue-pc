@@ -100,8 +100,19 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "ListContainer",
+  computed: {
+    ...mapState({ banners: (state) => state.home.banners }),
+  },
+  methods: {
+    ...mapActions["getBanners"],
+  },
+  mounted() {
+    this.getBanners();
+  },
 };
 </script>
 
