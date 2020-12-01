@@ -5,7 +5,7 @@ export default {
     state: {
         categoryList: [],
         banners: [], //首页轮播图数据
-        floors: []
+        floors: [] //楼层数据
 
     },
     getters: {},
@@ -18,6 +18,7 @@ export default {
 
         async getBanners({ commit }) {
             const banners = await reqGetBanners()
+            console.log(banners)
             commit('GET_BANNERS', banners)
 
         },
