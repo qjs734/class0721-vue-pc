@@ -1,9 +1,11 @@
 <template>
   <div>
+    <!-- 三级分类列表 -->
     <TypeNav />
+
     <div class="main">
       <div class="py-container">
-        <!--已经选择商品类别-->
+        <!-- 已选商品的类别 -->
         <div class="bread">
           <ul class="fl sui-breadcrumb">
             <li>
@@ -18,10 +20,10 @@
           </ul>
         </div>
 
-        <!--选择商品的类别-->
+        <!-- 选择商品的类别 -->
         <SearchSelector />
 
-        <!--商品列表导航-->
+        <!-- 商品列表导航 -->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
@@ -126,24 +128,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import TypeNav from "@comps/TypeNav";
+
 export default {
   name: "Search",
-
-  components: {
-    SearchSelector,
-    TypeNav,
-  },
   computed: {
-    /* ...mapState({
-      // productList: (state) => state.search.productList,
-      // trademarkList: (state) => state.search.productList.trademarkList,
-      // attrsList: (state) => state.search.productList.attrsList,
-      // goodsList: (state) => state.search.productList.goodsList,
-
-    }), */
+    // ...mapState({
+    //   // productList: (state) => state.search.productList,
+    //   trademarkList: (state) => state.search.productList.trademarkList,
+    //   attrsList: (state) => state.search.productList.attrsList,
+    //   goodsList: (state) => state.search.productList.goodsList,
+    // }),
     ...mapGetters(["goodsList"]),
   },
   methods: {
@@ -151,6 +148,10 @@ export default {
   },
   mounted() {
     this.getProductList();
+  },
+  components: {
+    SearchSelector,
+    TypeNav,
   },
 };
 </script>

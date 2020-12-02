@@ -19,7 +19,7 @@
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(attr, index) in attrs.attrValueList" :key="index">
-            <a>{{ attr }}}</a>
+            <a>{{ attr }}</a>
           </li>
         </ul>
       </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SearchSelector",
