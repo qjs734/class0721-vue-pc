@@ -88,7 +88,17 @@ export default {
         };
       }
       //为了避免编程式导航连续跳转单一网页,设置push后面的参数
-      this.$router.push(location);
+      //为了一次就退回主页,更换replace，但是要根据path来判断
+      // this.$router.push(location);
+
+      // if(this.$route.path.indexOf('/search')>-1){
+      // if(this.$route.path.includes('/search')){
+      // if(this.$route.path.startsWith('/search')){
+      // if(/^\search/.test(this.$route.path)){
+
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else this.$router.push(location);
       // .then((res) => {
       //   console.log("成功" + res);
       // })
@@ -96,6 +106,12 @@ export default {
       //   console.log(err);
       // });
     },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", () => {
+      //清空searchText
+      this.searchText = "";
+    });
   },
 };
 </script>
