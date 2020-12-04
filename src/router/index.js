@@ -5,6 +5,7 @@ import Home from '@views/Home'
 import Login from '@views/Login'
 import Register from '@views/Register'
 import Search from '@views/Search'
+import Detail from '@views/Detail'
 
 
 //写在这这样使用插件后，才能覆盖掉上面的原型上的方法
@@ -38,26 +39,36 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
     routes: [{
-        path: '/',
-        component: Home
-    }, {
-        path: '/login',
-        component: Login,
-        //当组件被加载显示的时候 meta组件的参数会传入$route中
-        //当组件不加载显示的时候 meta组件的参数不会传
-        meta: {
-            isFooterHide: true
+            path: '/',
+            component: Home
+        }, {
+            path: '/login',
+            component: Login,
+            //当组件被加载显示的时候 meta组件的参数会传入$route中
+            //当组件不加载显示的时候 meta组件的参数不会传
+            meta: {
+                isFooterHide: true
+            }
+        }, {
+            name: 'search',
+            //在路由匹配时后有params参数用：连接，假如空设置个?代表可选
+            path: '/search/:searchText?',
+            component: Search
+        }, {
+            path: '/register',
+            component: Register,
+            meta: {
+                isFooterHide: true
+            }
+        },
+        {
+            name: 'detail',
+            path: '/detail/:id',
+            component: Detail
         }
-    }, {
-        name: 'search',
-        //在路由匹配时后有params参数用：连接，假如空设置个?代表可选
-        path: '/search/:searchText?',
-        component: Search
-    }, {
-        path: '/register',
-        component: Register,
-        meta: {
-            isFooterHide: true
-        }
-    }]
+    ],
+    // 每次切换路由页面滚动条位置
+    scrollBehavior() {
+        return { x: 0, y: 0 };
+    },
 })
