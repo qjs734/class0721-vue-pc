@@ -21,7 +21,7 @@
 <script>
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper"; //引入轮播图及插件
 Swiper.use([Navigation, Pagination, Autoplay]); //swiper使用插件
-import "swiper/swiper-bundle.min.css";
+// import "swiper/swiper-bundle.min.css";
 
 export default {
   name: "Carousel",

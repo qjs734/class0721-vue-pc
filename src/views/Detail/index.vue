@@ -16,9 +16,25 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <!-- :imgUrl="skuInfo.skuImageList[currentImgIndex].imgUrl" -->
+          <Zoom
+            :imgUrl="
+              skuInfo.skuImageList &&
+              skuInfo.skuImageList[currentImgIndex] &&
+              skuInfo.skuImageList[currentImgIndex].imgUrl
+            "
+            :bigImgUrl="
+              skuInfo.skuImageList &&
+              skuInfo.skuImageList[currentImgIndex] &&
+              skuInfo.skuImageList[currentImgIndex].imgUrl
+            "
+          />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList
+            :skuImageList="skuInfo.skuImageList"
+            :updateCurrentImgIndex="updateCurrentImgIndex"
+          />
+          <!-- 一个是传过去一个数组 一个是点击了更换当前图片index -->
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -341,11 +357,19 @@ import Zoom from "./Zoom/Zoom";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      currentImgIndex: 0, //当前选中图片的下标
+    };
+  },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
     ...mapActions(["getProductDetail"]),
+    updateCurrentImgIndex(index) {
+      this.currentImgIndex = index;
+    },
   },
   mounted() {
     this.getProductDetail(this.$route.params.id);

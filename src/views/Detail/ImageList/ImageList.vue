@@ -1,8 +1,13 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="../images/s1.png" />
+      <div
+        class="swiper-slide"
+        v-for="(skuImage, index) in skuImageList"
+        :key="skuImage.id"
+      >
+        <!-- 图片遍历 -->
+        <img :src="skuImage.imgUrl" @click="updateCurrentImgIndex(index)" />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -12,9 +17,31 @@
 
 <script>
 // import Swiper from 'swiper'
+import Swiper, { Navigation } from "swiper"; //引入轮播图及插件
+Swiper.use([Navigation]); //swiper使用插件
 
 export default {
   name: "ImageList",
+  props: {
+    skuImageList: Array,
+    updateCurrentImgIndex: Function,
+  },
+  watch: {
+    skuImageList() {
+      //一旦触发 说明值有改变 此时有数据
+      this.$nextTick(() => {
+        new Swiper(this.$refs.swiper, {
+          slidesPerView: 5, // 每页显示轮播图的数量
+          spaceBetween: 30, // 轮播图间距
+          slidesPerGroup: 5, // 切换时切换轮播图的数量
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
+      });
+    },
+  },
 };
 </script>
 
