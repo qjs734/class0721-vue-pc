@@ -27,7 +27,7 @@
           <li class="cart-list-con5">
             <a
               href="javascript:void(0)"
-              @click="updateCount(cart.skuId, -1)"
+              @click="updateCount(cart.skuId, -1, cart.skuNum)"
               class="mins"
               >-</a
             >
@@ -37,10 +37,12 @@
               :value="cart.skuNum"
               minnum="1"
               class="itxt"
+              @blur="update(cart.skuId, cart.skuNum, $event)"
+              @input="formatSkuNum"
             />
             <a
               href="javascript:void(0)"
-              @click="updateCount(cart.skuId, 1)"
+              @click="updateCount(cart.skuId, 1, cart.skuNum)"
               class="plus"
               >+</a
             >
@@ -109,28 +111,58 @@ export default {
   },
   methods: {
     ...mapActions(["getCartList", "updateCartCount", "deleteCartItem1"]),
-    // 更新商品数量
-    async updateCount(skuId, skuNum) {
+    //格式化数据
+    formatSkuNum(e) {
+      // 因为是绑定了cart.skuNum这个数，所以修改的时候就间接修改了这个数
+      let skuNum = +e.target.value.replace(/\D+/g, "");
+      if (skuNum < 1) {
+        skuNum = 1;
+      } else if (skuNum > 10) {
+        skuNum = 10;
+      }
+      e.target.value = skuNum;
+    },
+    //失去焦点更改值
+    update(skuId, skuNum, e) {
+      //因为这个方法不是直接更改，而是拿现在的值与当初的值做比较，正数就加负数就减
+      this.updateCartCount({ skuId, skuNum: e.target.value - skuNum });
+    },
+
+    // 更新商品数量  商品id  skuNum是传入的+1 -1  count是商品的数量
+    async updateCount(skuId, skuNum, count) {
       // 更新商品
+      if (count <= 1 && skuNum === -1) {
+        if (window.confirm("您确定是否要删除商品?")) {
+          //删除商品的接口还没写
+          await this.deleteCartItem1(skuId);
+          this.getCartList();
+        }
+        return;
+      }
+      if (count >= 10 && skuNum === 1) {
+        alert("超出库存了！");
+        return;
+      }
       await this.updateCartCount({ skuId, skuNum });
       // 刷新页面
       // this.getCartList();
     },
+
     //删除操作
     async deleteCartItem(skuId) {
       //弹出对话框
       if (window.confirm("您确定要删除吗？")) {
         //分发action
-        const errorMsg = this.$store.dispatch("deleteCartItem1", skuId);
-        // const errorMsg = await this.deleteCartItem1(skuId);
-        console.log(errorMsg);
-        if (!errorMsg) {
-          // 失败
-          alert(errorMsg);
-        } else {
-          //成功
-          this.getCartList();
-        }
+        // const errorMsg = this.$store.dispatch("deleteCartItem1", skuId);
+        await this.deleteCartItem1(skuId);
+        // console.log(errorMsg);
+        // if (!errorMsg) {
+        //   // 失败
+        //   alert(errorMsg);
+        // } else {
+        //   //成功
+        this.getCartList();
+        // }
       }
     },
   },

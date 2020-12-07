@@ -8,6 +8,7 @@ import {
 export default {
     state: {
         cartList: [], // 所有购物车数据
+        currentCart: {}
     },
     getters: {},
     actions: {
@@ -38,7 +39,27 @@ export default {
             await reqDelCart(skuId)
             console.log(commit);
             // return result.code === 200 ? '' : result.message || '删除失败'
-        }
+        },
+        //添加到购物车成功
+        /*  async addToCart1({ commit }, { skuId, skuNum, callback }) {
+             const result = await reqUpdateCartCount(skuId, skuNum)
+                 // return result.code === 200 ? '' : result.message || '删除失败'
+             if (result.code === 200) {
+                 callback(' ')
+                 console.log(commit);
+             } else {
+                 callback(result.message || '添加失败')
+
+             }
+         } */
+        //通过this.$store.dispatch('action')会有返回值，就是当前这个action的返回值
+        /* async addToCart2({ state, commit }, { skuId, skuNum }) {
+            await reqUpdateCartCount(skuId, skuNum)
+            console.log(commit);
+            // return result.code === 200 ? '' : result.message || '添加失败'
+            const currentCart = state.cartList.find(cart => cart.id === skuId)
+            commit('ADD_TO_CART', currentCart)
+        } */
     },
     mutations: {
         GET_CART_LIST(state, cartList) {
@@ -52,6 +73,8 @@ export default {
                 return cart;
             });
         },
-
+        ADD_TO_CART(state, currentCart) {
+            state.currentCart = currentCart
+        }
     },
 };

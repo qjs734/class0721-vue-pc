@@ -409,7 +409,27 @@ export default {
       } catch (e) {
         console.log(e);
       }
+      /*  const query = {
+        skuId: this.skuInfo.id,
+        skuNum: this.skuNum,
+      }; */
+      // this.$store.dispatch("addToCart1", query);
+      // this.$store.dispatch("addToCart1", { ...query, callback: this.callback });
+      // this.$store.dispatch("addToCart2", query);
+      // this.$router.push({ path: "/addcartsuccess", query });
     },
+    //回调函数
+    /* callback(errorMsg) {
+      if (!errorMsg) {
+        const query = {
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        };
+        this.$router.push({ path: "/addcartsuccess", query });
+      } else {
+        alert(errorMsg);
+      }
+    }, */
   },
   mounted() {
     this.getProductDetail(this.$route.params.id);
