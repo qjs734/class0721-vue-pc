@@ -1,15 +1,32 @@
-import request from '@utils/request'
+import request from "@utils/request";
 
-//封装一个发送请求的功能函数
+// 封装一个发送请求的功能函数
 export const reqLogin = (phone, password) => {
-    //将request返回值返回出去 外面可以接受request返回值promise对象，通过这个可以判断请求成功还是请求失败
+    // 将request的返回值返回出去
+    // 外面可以接受到request返回值（promise对象），通过这个promise对象可以判断请求成功。失败
     return request({
-        method: 'POST',
-        url: '/user/passport/login',
+        method: "POST",
+        url: "/user/passport/login",
+        data: {
+            // 放置请求体参数，通常post请求
+            phone,
+            password,
+        },
+        // params: {}, // 放置查询字符串参数，通常get请求
+    });
+};
+
+// export const reqRegister = ({phone, password, code}) => {}
+// 注册
+export const reqRegister = ({ phone, password, code }) => {
+    return request({
+        method: "POST",
+        url: "/user/passport/register",
         data: {
             phone,
-            password
-        }, //放置请求体参数，通常是post请求
-        // params: {} //放置查询字符串参数，通常是get请求
-    })
-}
+            password,
+            code,
+        },
+    });
+
+};

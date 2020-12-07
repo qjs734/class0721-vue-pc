@@ -1,88 +1,119 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-// 引入其他组件
-import Home from '@views/Home'
-import Login from '@views/Login'
-import Register from '@views/Register'
-import Search from '@views/Search'
-import Detail from '@views/Detail'
-import ShopCart from '@views/ShopCart'
-import AddCartSuccess from '@views/AddCartSuccess'
+// @ts-nocheck
+import Vue from "vue";
+import VueRouter from "vue-router";
 
+import Home from "../views/Home";
+import Login from "../views/Login";
+import Register from "../views/Register";
+import Search from "../views/Search";
+import Detail from "../views/Detail";
+import AddCartSuccess from "../views/AddCartSuccess";
+import ShopCart from "../views/ShopCart";
+import Trade from "../views/Trade";
+import Pay from "../views/Pay";
+import PaySuccess from "../views/PaySuccess";
+import Center from "../views/Center";
 
-//写在这这样使用插件后，才能覆盖掉上面的原型上的方法
-const push = VueRouter.prototype.push //必须把方法写在这，不然会连续的反复调用,造成死循环
-const replace = VueRouter.prototype.replace
-
+// 重写push和replace方法
+// 目的：为了让编程式导航重复点击时不报错~
+const push = VueRouter.prototype.push;
+const replace = VueRouter.prototype.replace;
 
 VueRouter.prototype.push = function(location, onComplete, onAbort) {
-    console.log(location);
-    //如果用户想处理失败就处理  
+    // 如果用户想处理失败，就处理
     if (onComplete && onAbort) {
-        push.call(this, location, onComplete, onAbort)
+        return push.call(this, location, onComplete, onAbort);
     }
-    // 如果没有就不处理，给默认值是个空函数
-    return push.call(this, location, onComplete, () => {})
-}
+    // 如果用户不处理失败，给默认值：空函数
+    return push.call(this, location, onComplete, () => {});
+};
 
 VueRouter.prototype.replace = function(location, onComplete, onAbort) {
-    console.log(location);
-    //如果用户想处理失败就处理  
+    // 如果用户想处理失败，就处理
     if (onComplete && onAbort) {
-        replace.call(this, location, onComplete, onAbort)
+        return replace.call(this, location, onComplete, onAbort);
     }
-    // 如果没有就不处理，给默认值是个空函数
-    return replace.call(this, location, onComplete, () => {})
-}
+    // 如果用户不处理失败，给默认值：空函数
+    return replace.call(this, location, onComplete, () => {});
+};
 
-//安装应用插件
-Vue.use(VueRouter)
-
+// 安装插件
+Vue.use(VueRouter);
 
 export default new VueRouter({
+    // 路由配置
     routes: [{
-            path: '/',
-            component: Home
-        }, {
-            path: '/login',
+            path: "/",
+            component: Home,
+        },
+        {
+            path: "/login",
             component: Login,
-            //当组件被加载显示的时候 meta组件的参数会传入$route中
-            //当组件不加载显示的时候 meta组件的参数不会传
+            // 当组件加载显示时，meta中的参数会传到$route中
+            // 当组件不加载显示时，meta中的参数不会传
             meta: {
-                isFooterHide: true
-            }
-        }, {
-            name: 'search',
-            //在路由匹配时后有params参数用：连接，假如空设置个?代表可选
-            path: '/search/:searchText?',
-            component: Search
-        }, {
-            path: '/register',
+                isFooterHide: true,
+            },
+        },
+        {
+            path: "/register",
             component: Register,
             meta: {
-                isFooterHide: true
-            }
+                isFooterHide: true,
+            },
         },
         {
-            name: 'detail',
-            path: '/detail/:id',
-            component: Detail
+            // 命名路由
+            name: "search",
+            // ?: 代表 params 参数是可选的
+            path: "/search/:searchText?",
+            component: Search,
         },
         {
-            // 添加购物车
+            // 命名路由
+            name: "detail",
+            path: "/detail/:id",
+            component: Detail,
+        },
+        {
+            // 命名路由
             name: "addcartsuccess",
             path: "/addcartsuccess",
             component: AddCartSuccess,
         },
         {
-            // 购物车
+            // 命名路由
             name: "shopcart",
             path: "/shopcart",
             component: ShopCart,
+        },
+        {
+            // 命名路由
+            name: "trade",
+            path: "/trade",
+            component: Trade,
+        },
+        {
+            // 命名路由
+            name: "pay",
+            path: "/pay",
+            component: Pay,
+        },
+        {
+            // 命名路由
+            name: "paysuccess",
+            path: "/paysuccess",
+            component: PaySuccess,
+        },
+        {
+            // 命名路由
+            name: "center",
+            path: "/center/myorder",
+            component: Center,
         },
     ],
     // 每次切换路由页面滚动条位置
     scrollBehavior() {
         return { x: 0, y: 0 };
     },
-})
+});

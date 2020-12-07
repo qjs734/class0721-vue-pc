@@ -14,6 +14,8 @@ import getUserTempId from '@utils/getUserTempId'
 import 'nprogress/nprogress.css'
 //单独element引用样式
 import { Message } from 'element-ui';
+//引入token数据 store就是vuex里的store也就是this.$store
+import store from '../store/index'
 
 /* 
 uuid使用方法
@@ -44,9 +46,10 @@ instance.interceptors.request.use(
         (config) => {
             //config请求的配置对象 有请求地址、请求参数、请求方式 都会在这找
             //修改config用来添加公共的请求参数
-            /* if (token) {
+            const token = store.state.user.token
+            if (token) {
                 config.headers.token = { token }
-            } */
+            }
             NProgress.start();
             // const userTempId = getUserTempId() //放在这就是在硬盘中  放在外面就是缓存中
             config.headers.userTempId = userTempId //给请求头加上这个id
