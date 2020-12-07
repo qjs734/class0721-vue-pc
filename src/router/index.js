@@ -6,6 +6,8 @@ import Login from '@views/Login'
 import Register from '@views/Register'
 import Search from '@views/Search'
 import Detail from '@views/Detail'
+import ShopCart from '@views/ShopCart'
+import AddCartSuccess from '@views/AddCartSuccess'
 
 
 //写在这这样使用插件后，才能覆盖掉上面的原型上的方法
@@ -65,7 +67,19 @@ export default new VueRouter({
             name: 'detail',
             path: '/detail/:id',
             component: Detail
-        }
+        },
+        {
+            // 添加购物车
+            name: "addcartsuccess",
+            path: "/addcartsuccess",
+            component: AddCartSuccess,
+        },
+        {
+            // 购物车
+            name: "shopcart",
+            path: "/shopcart",
+            component: ShopCart,
+        },
     ],
     // 每次切换路由页面滚动条位置
     scrollBehavior() {

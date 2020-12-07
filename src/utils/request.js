@@ -9,11 +9,28 @@
 import axios from 'axios'
 // 引入进度条样式
 import NProgress from 'nprogress'
+//使用uuid库，uuid就是给临时未登录用户一个id，通过id访问购物车数据
+import getUserTempId from '@utils/getUserTempId'
 import 'nprogress/nprogress.css'
 //单独element引用样式
 import { Message } from 'element-ui';
 
+/* 
+uuid使用方法
+1生成存起来 存在localstorage中 如果userTempId刷新了数据就没了
+2所以存在localstorage中持久存储 未来可以反复使用  
+sessionStorage会话存储（一旦关闭浏览器数据清空）
+        xxx.setItem(key,value)存储
+        xxx.getItem(key)读取
+        xxx.removeItem(key)删除单个
+        xxx.clear()清空所有
+3. 整体流程：
+		- 先读取本地localStorage数据，看是否有userTempId
+		- 如果有，直接使用
+		- 如果没有，需要创建userTempId，同时保存在localStorage中
 
+	4. 在内存中缓存一份localStorage数据，让性能更好
+ */
 
 
 const instance = axios.create({
@@ -21,8 +38,8 @@ const instance = axios.create({
     headers: { // token就不行 登录接口不用
     }
 })
-
-//设置请求拦截器
+const userTempId = getUserTempId() //执行一次 之后就不用老是去触发
+    //设置请求拦截器
 instance.interceptors.request.use(
         (config) => {
             //config请求的配置对象 有请求地址、请求参数、请求方式 都会在这找
@@ -31,8 +48,10 @@ instance.interceptors.request.use(
                 config.headers.token = { token }
             } */
             NProgress.start();
-
+            // const userTempId = getUserTempId() //放在这就是在硬盘中  放在外面就是缓存中
+            config.headers.userTempId = userTempId //给请求头加上这个id
             return config
+
         },
         // 初始化时是成功的promise.resolve（）返回的是成功的promise，
         // ()=>{}失败的promise函数
@@ -62,7 +81,7 @@ instance.interceptors.response.use(
     (error) => {
         NProgress.done(); //进度条结束
 
-        console.dir(error);
+        // console.dir(error);
         const message = error.message || '网络错误'
         Message.error(message)
         return Promise.reject(message)

@@ -97,7 +97,13 @@
                   changepirce="0"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
-                  class="active"
+                  :class="{ active: spuSaleAttrValue.isChecked === '1' }"
+                  @click="
+                    setChecked(
+                      spuSaleAttrValue,
+                      spuSaleAttr.spuSaleAttrValueList //数组-大对象-小数组-小对象
+                    )
+                  "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
@@ -105,11 +111,23 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <!--  <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : ''"
+                  >-</a
+                > -->
+                <el-input-number
+                  class="input-number"
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="100"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -360,15 +378,37 @@ export default {
   data() {
     return {
       currentImgIndex: 0, //当前选中图片的下标
+      skuNum: 1, //默认数量是1,，体验感最好
     };
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
+    },
+    // 设置某个销售属性值的选中操作
+    setChecked(spuVal, valueList) {
+      // 排他效果,先把数组中的每个销售属性值对象的isChecked变成0
+      valueList.forEach((v) => (v.isChecked = "0"));
+      // 只有当前点击的这个属性值为1
+      spuVal.isChecked = "1";
+    },
+    //加入购物车
+    async addCart() {
+      try {
+        //发送请求加入购物车
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        //一旦加入购物车成功就跳转到购物车页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   mounted() {
@@ -550,7 +590,9 @@ export default {
               position: relative;
               float: left;
               margin-right: 15px;
-
+              .input-number {
+                width: 150px;
+              }
               .itxt {
                 width: 38px;
                 height: 37px;
@@ -587,6 +629,7 @@ export default {
 
             .add {
               float: left;
+              margin-left: 100px;
 
               a {
                 background-color: #e1251b;
