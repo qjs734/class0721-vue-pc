@@ -1,6 +1,7 @@
 // @ts-nocheck
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from '@store/index'
 
 import Home from "../views/Home";
 import Login from "../views/Login";
@@ -40,7 +41,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
 // 安装插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
     // 路由配置
     routes: [{
             path: "/",
@@ -80,6 +81,13 @@ export default new VueRouter({
             name: "addcartsuccess",
             path: "/addcartsuccess",
             component: AddCartSuccess,
+            /* beforeEnter: (to, from, next) => {
+                // 	// 需求：只有添加了购物车才能进行，没有添加就去购物车页面
+                if (from.name === "detail" && sessionStorage.getItem("cart")) {
+                    return next();
+                }
+                next("/shopcart")
+            } */
         },
         {
             // 命名路由
@@ -88,25 +96,25 @@ export default new VueRouter({
             component: ShopCart,
         },
         {
-            // 命名路由
+            // 结算订单
             name: "trade",
             path: "/trade",
             component: Trade,
         },
         {
-            // 命名路由
+            // 支付
             name: "pay",
             path: "/pay",
             component: Pay,
         },
         {
-            // 命名路由
+            // 支付成功
             name: "paysuccess",
             path: "/paysuccess",
             component: PaySuccess,
         },
         {
-            // 命名路由
+            // 订单界面
             name: "center",
             path: "/center/myorder",
             component: Center,
@@ -117,3 +125,58 @@ export default new VueRouter({
         return { x: 0, y: 0 };
     },
 });
+
+//路由全局前置守卫  to去哪  from来自哪（当前的路由）next是一个函数 跳转到哪个路由
+/*
+		to   要去的路由对象($route)
+		from 从哪来的路由对象（当前路由对象）($route)
+		next 是一个函数：跳转到哪个路由的方法
+			比如：要去to这个路由 next()	
+						要去登录路由 next('/login')  next({path: '/login'})  next({name: 'login'})
+	
+		
+		权限验证：
+			如果用户未登录，不允许去 trade pay center 等路由
+    */
+// 需要进行权限验证的地址 判断你要去的地址在不在权限地址里，不在你就走。在就判断是否有token有就去，没有就去login
+const permissionPaths = ["/trade", "/pay", "/center"];
+router.beforeEach((to, from, next) => {
+    /* if (permissionPaths.indexOf(to.path) > -1) {
+        if (store.state.user.token) {
+            return next()
+        } else(
+            next('/login')
+        )
+    } else {
+        next()
+    } */
+    //简易写法  假如你想去的路径在权限里，又没有token，你就去login。其他的你想去哪儿就去哪儿    
+    if (permissionPaths.indexOf(to.path) > -1 && !store.state.user.token) {
+        return next("/login");
+    }
+    next();
+})
+
+export default router
+/*
+	https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%85%A8%E5%B1%80%E5%89%8D%E7%BD%AE%E5%AE%88%E5%8D%AB
+	路由守卫：
+		1. 是什么
+			在路由跳转之前、之中、之后触发的钩子函数（类似于生命周期）
+		2. 分类
+			全局守卫
+				全局前置守卫：在切换路由之前触发
+					beforeEach
+				全局解析守卫：之中
+					beforeResolve
+				全局后置守卫：之后
+					afterEach
+			路由守卫
+				beforeEnter
+			组件守卫		
+				beforeRouteEnter
+				beforeRouteUpdate
+				beforeRouteLeave
+		3. 作用：
+			用来做权限认证（判断当前要跳转的地址，有没有权限可以访问）			
+*/

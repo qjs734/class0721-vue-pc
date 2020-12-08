@@ -26,6 +26,23 @@
 <script>
 export default {
   name: "AddCartSuccess",
+  data() {
+    return {
+      cart: JSON.parse(sessionStorage.getItem("cart") || "{}"),
+    };
+  },
+  beforeRouteEnter(to, from, next) {
+    // next((vm) => {
+    // 通过 `vm` 访问组件实例  需要用到this 的时候用vm包裹00
+    // 需求：只有添加了购物车才能进行，没有添加就去购物车页面
+    // console.log(to, from, next);
+    // 1. 从detail过来 2. 有数据
+    if (from.name === "detail" && sessionStorage.getItem("cart")) {
+      return next();
+    }
+    next("/shopcart");
+    // });
+  },
 };
 </script>
 

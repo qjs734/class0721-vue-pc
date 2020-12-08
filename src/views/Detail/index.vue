@@ -405,6 +405,7 @@ export default {
           skuNum: this.skuNum,
         });
         //一旦加入购物车成功就跳转到购物车页面
+        sessionStorage.setItem("cart", JSON.stringify(this.skuInfo));
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
       } catch (e) {
         console.log(e);
