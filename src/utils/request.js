@@ -48,7 +48,7 @@ instance.interceptors.request.use(
             //修改config用来添加公共的请求参数
             const token = store.state.user.token
             if (token) {
-                config.headers.token = { token }
+                config.headers.token = token
             }
             NProgress.start();
             // const userTempId = getUserTempId() //放在这就是在硬盘中  放在外面就是缓存中

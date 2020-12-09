@@ -8,10 +8,10 @@
             <img src="good.skuDefaultImg" />
           </div>
           <div class="right-info">
-            <p class="title">
-              小米红米 Redmi note8 手机 梦幻蓝 全网通(4GB+64GB)
+            <p class="title">{{ list.name }}</p>
+            <p class="attr">
+              颜色：WFZ5099IH/5L钛金釜内胆 数量：{{ list.num }}
             </p>
-            <p class="attr">颜色：WFZ5099IH/5L钛金釜内胆 数量：2</p>
           </div>
         </div>
         <div class="right-gocart">
@@ -29,19 +29,26 @@ export default {
   data() {
     return {
       cart: JSON.parse(sessionStorage.getItem("cart") || "{}"),
+      list: {},
     };
   },
-  beforeRouteEnter(to, from, next) {
-    // next((vm) => {
-    // 通过 `vm` 访问组件实例  需要用到this 的时候用vm包裹00
-    // 需求：只有添加了购物车才能进行，没有添加就去购物车页面
-    // console.log(to, from, next);
-    // 1. 从detail过来 2. 有数据
-    if (from.name === "detail" && sessionStorage.getItem("cart")) {
-      return next();
-    }
-    next("/shopcart");
-    // });
+  // beforeRouteEnter(to, from, next) {
+  //   // next((vm) => {
+  //   // 通过 `vm` 访问组件实例  需要用到this 的时候用vm包裹00
+  //   // 需求：只有添加了购物车才能进行，没有添加就去购物车页面
+  //   // console.log(to, from, next);
+  //   // 1. 从detail过来 2. 有数据
+  //   if (from.name === "detail" && sessionStorage.getItem("cart")) {
+  //     return next();
+  //   }
+  //   next("/shopcart");
+  //   // });
+  // },
+  mounted() {
+    this.$bus.$on("test1", (data) => {
+      console.log(data);
+      this.list = data;
+    });
   },
 };
 </script>

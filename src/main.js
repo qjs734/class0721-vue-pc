@@ -11,6 +11,7 @@ import './mock/mockServer'
 import './styles/reset.css' //引入公共资源
 import './styles/iconfont.css' //引入公共资源
 import './plugins/element.js' //使用element的button
+import './plugins/lazyload.js' //使用懒加载
 import "swiper/swiper-bundle.min.css"; //引入swiper组件的样式
 
 

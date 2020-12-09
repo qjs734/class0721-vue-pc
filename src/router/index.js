@@ -141,15 +141,15 @@ const router = new VueRouter({
 // 需要进行权限验证的地址 判断你要去的地址在不在权限地址里，不在你就走。在就判断是否有token有就去，没有就去login
 const permissionPaths = ["/trade", "/pay", "/center"];
 router.beforeEach((to, from, next) => {
-    /* if (permissionPaths.indexOf(to.path) > -1) {
-        if (store.state.user.token) {
-            return next()
-        } else(
-            next('/login')
-        )
-    } else {
-        next()
-    } */
+    /*  if (permissionPaths.indexOf(to.path) > -1) {
+         if (store.state.user.token) {
+             return next()
+         } else(
+             next('/login')
+         )
+     } else {
+         next()
+     } */
     //简易写法  假如你想去的路径在权限里，又没有token，你就去login。其他的你想去哪儿就去哪儿    
     if (permissionPaths.indexOf(to.path) > -1 && !store.state.user.token) {
         return next("/login");

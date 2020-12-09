@@ -80,7 +80,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <button @click="submit" class="sum-btn">结算</button>
         </div>
       </div>
     </div>
@@ -164,6 +164,9 @@ export default {
         this.getCartList();
         // }
       }
+    },
+    submit() {
+      this.$router.push("/trade");
     },
   },
   mounted() {
@@ -370,7 +373,7 @@ export default {
       .sumbtn {
         float: right;
 
-        a {
+        button {
           display: block;
           position: relative;
           width: 96px;

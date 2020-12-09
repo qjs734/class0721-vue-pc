@@ -406,7 +406,13 @@ export default {
         });
         //一旦加入购物车成功就跳转到购物车页面
         sessionStorage.setItem("cart", JSON.stringify(this.skuInfo));
+        const num = this.skuNum;
+        const price = this.skuInfo.price;
+        const name = this.skuInfo.skuName;
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+        setTimeout(() => {
+          this.$bus.$emit("test1", { num, price, name });
+        });
       } catch (e) {
         console.log(e);
       }
