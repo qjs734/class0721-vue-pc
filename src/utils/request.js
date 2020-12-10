@@ -34,14 +34,21 @@ sessionStorage会话存储（一旦关闭浏览器数据清空）
 	4. 在内存中缓存一份localStorage数据，让性能更好
  */
 
+const userTempId = getUserTempId() //执行一次 之后就不用老是去触发
+    //配置生产及开发环境应该有的请求路径
+console.log(process.env.NODE_ENV); //development production 通过这个值区分环境
+
+const prefix_url = process.env.NODE_ENV === 'development' ? '/' : 'http://182.92.128.115/'
+
+
 
 const instance = axios.create({
-    baseURL: '/api', //公共的基础路径 一般由请求服务器地址跟api组成
+    baseURL: `${prefix_url}api`, //公共的基础路径 一般由请求服务器地址跟api组成
     headers: { // token就不行 登录接口不用
     }
 })
-const userTempId = getUserTempId() //执行一次 之后就不用老是去触发
-    //设置请求拦截器
+
+//设置请求拦截器
 instance.interceptors.request.use(
         (config) => {
             //config请求的配置对象 有请求地址、请求参数、请求方式 都会在这找

@@ -409,9 +409,10 @@ export default {
         const num = this.skuNum;
         const price = this.skuInfo.price;
         const name = this.skuInfo.skuName;
+        const img = this.skuInfo.skuDefaultImg;
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
         setTimeout(() => {
-          this.$bus.$emit("test1", { num, price, name });
+          this.$bus.$emit("test1", { num, price, name, img });
         });
       } catch (e) {
         console.log(e);

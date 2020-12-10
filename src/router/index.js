@@ -3,7 +3,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from '@store/index'
 
-import Home from "../views/Home";
+/* import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
 import Search from "../views/Search";
@@ -13,7 +13,35 @@ import ShopCart from "../views/ShopCart";
 import Trade from "../views/Trade";
 import Pay from "../views/Pay";
 import PaySuccess from "../views/PaySuccess";
-import Center from "../views/Center";
+import Center from "../views/Center"; */
+
+//实现路由懒加载  将组件设置成函数，这样上来就不会调用，只有当路由组件加载才调动这个函数，再异步加载js文件
+// 路由组件懒加载
+// 1. 会将路由组件打包成单独的js文件（webpack代码分割）
+// 2. 异步加载路由组件（需要使用才加载）（Vue异步加载组件功能）
+const Home = () =>
+    import ( /* webpackChunkName: "Home" */ "../views/Home");
+const Login = () =>
+    import ( /* webpackChunkName: "Login" */ "../views/Login");
+const Register = () =>
+    import ( /* webpackChunkName: "Register" */ "../views/Register");
+const Search = () =>
+    import ( /* webpackChunkName: "Search" */ "../views/Search");
+const Detail = () =>
+    import ( /* webpackChunkName: "Detail" */ "../views/Detail");
+const AddCartSuccess = () =>
+    import ( /* webpackChunkName: "AddCartSuccess" */ "../views/AddCartSuccess");
+const ShopCart = () =>
+    import ( /* webpackChunkName: "ShopCart" */ "../views/ShopCart");
+const Trade = () =>
+    import ( /* webpackChunkName: "Trade" */ "../views/Trade");
+const Pay = () =>
+    import ( /* webpackChunkName: "Pay" */ "../views/Pay");
+const PaySuccess = () =>
+    import ( /* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
+const Center = () =>
+    import ( /* webpackChunkName: "Center" */ "../views/Center");
+
 
 // 重写push和replace方法
 // 目的：为了让编程式导航重复点击时不报错~

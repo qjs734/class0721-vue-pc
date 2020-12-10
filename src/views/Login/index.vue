@@ -80,10 +80,10 @@
 
 <script>
 import { mapState } from "vuex";
-import { ValidationProvider, extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import { ValidationProvider } from "vee-validate";
+/* import { required } from "vee-validate/dist/rules";
 
-extend("required", required);
+extend("required", required); */
 
 export default {
   name: "Login",

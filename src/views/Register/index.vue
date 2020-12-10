@@ -77,7 +77,8 @@
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
+console.log(1111);
+// import { mapActions } from "vuex";
 import { ValidationProvider, extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 /*
@@ -172,6 +173,9 @@ export default {
       this.$refs.code.src = "http://182.92.128.115/api/user/passport/code";
       // e.target.src = "http://182.92.128.115/api/user/passport/code";
     },
+  },
+  mounted() {
+    console.log(2222222222222);
   },
   components: {
     ValidationProvider,
